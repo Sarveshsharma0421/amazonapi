@@ -1,0 +1,28 @@
+{
+    "openapi":"3.0.0",
+    "info":{
+        "description":"This is api for Amazon",
+        "version":"_version_"
+   },
+   "tags":[
+    {
+        "name":"PUBLIC ROUTE",
+        "description":"This is Public Route"
+    }
+   ],
+   "paths":{
+    "/health":{
+        "summary":"Testing Health Check",
+        "get":{
+            "description":"Testing User for app",
+            "tags":["PUBLIC ROUTE"] ,
+            "responses":{
+                "200":{
+                    "description":"Health Check App"
+                }
+            }
+
+          }
+   }
+}
+}

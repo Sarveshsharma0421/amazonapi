@@ -1,0 +1,118 @@
+
+ In monogdb 
+  Clusters means one spase
+mongodb username:-snps042006
+ monogdb password:-gTFCKwnsTQ6GjAVd
+ to connect the mongodb:-mongodb+srv://snps042006:gTFCKwnsTQ6GjAVd@cluster0.3xyoxgf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+\
+
+asyce means:- We every wait for respon we start with asyce keyword.
+await means:- we waiting for data we write await.
+
+
+////
+ import express from 'express';
+ let app = express();
+ let port = 9110;
+ let cors = require('cors');
+ import {dbConnect, getData} from ('./controller/decontroller');
+
+ app.use(cors())
+
+ app.get('/',(req,res)=>{
+    res.send('Hii From Express')
+ });
+
+ app.get('/category',(req,res)=>{
+    res.send('Hii From category')
+ })
+
+ app.get('/products',(req,res)=>{
+    res.send('Hii From Products')
+ })
+
+ app.get('/products detail',(req,res)=>{
+    res.send('Hii From Products detail')
+ })
+
+ app.listen(port,(err) =>{
+    if(err) throw err;
+    console.log(`Server is running on port ${port}`)
+    })
+
+
+/////////////////////////////////////////////////
+
+//let mongo = require('mongodb')
+import mongo from 'mongodb'
+let {MongoClient} = mongo;
+let mongoUrl = 'mongodb://127.0.0.1:27017';
+
+let client = new MongoClient(mongoUrl);
+
+async function dbConnect(){
+    await client.connect()
+}
+
+let db = client.db('restaurants');
+
+async function getData(colName,query){
+    let output = [];
+    try{
+        const cursor = db.collection(colName).find(query);
+        for await(const data of cursor){
+            output.push(data)
+        }
+        cursor.close();
+    } catch(err){
+        output.push({"Error":"Error in get Data"})
+    }
+
+    return output
+}
+
+///////////////
+import express from 'express';
+let {dbConnect, getData} = ('./controller/dbController');
+let app = express();
+let port = 4000;
+import cors from 'cors';
+
+
+app.use(cors())
+
+app.get('/',(req,res)=>{
+   res.send('Hii From Express')
+});
+
+app.get('/location',(req,res)=>{
+   res.send('Hii From location')
+})
+
+app.get('/quickSearch',(req,res)=>{
+   res.send(' quickSearch route')
+})
+
+app.listen(port,(err) =>{
+   if(err) throw err;
+   console.log(`Server is running on port ${port}`)
+   })
+
+//////////////////////////////////////
+
+app.get('filter/:categoryId'),async(req,res) => {
+  let query = {}
+  let categoryId = Number(req.params.categoryId)
+  let productId = Number(req.query.productId)
+  
+  if(productId){
+    query = {
+      "category.category_id":categoryId,
+      "productdetail.product_id":productId
+    }
+  }else{
+    query = {
+      "category.category_id":categoryId
+    }
+  }
+ }
